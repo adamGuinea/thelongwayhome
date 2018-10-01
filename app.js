@@ -15,7 +15,10 @@ methodOverride = require("method-override"),
 var commentRoutes    = require("./routes/comments"),
     campgroundRoutes = require("./routes/campgrounds"),
     indexRoutes      = require("./routes/index");
-mongoose.connect("mongodb://localhost:27017/yelp_camp",{ useNewUrlParser: true });
+    
+// mongoose.connect("mongodb://localhost:27017/yelp_camp",{ useNewUrlParser: true });
+mongoose.connect("mongodb://adam:barney99@ds215563.mlab.com:15563/vanlife", { useNewUrlParser: true });
+
 app.use(bodyparser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
