@@ -1,3 +1,6 @@
+require('dotenv').config();
+
+ 
    var express = require("express"),
            app = express(),
     bodyparser = require("body-parser"),
@@ -43,6 +46,7 @@ app.use(function(req, res, next){
     next();
 });
 
+app.locals.moment = require('moment');
 // PASSPORT CONFIG
 
 
