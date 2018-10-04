@@ -81,18 +81,21 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function (req, r
 
         //Error handling provided by google docs -https://developers.google.com/places/web-service/autocomplete 
         if (err || data.status === 'ZERO_RESULTS') {
+            console.log(err)
             req.flash('error', 'Invalid address, try typing a new address');
             return res.redirect('back');
         }
 
         //Error handling provided by google docs -https://developers.google.com/places/web-service/autocomplete 
         if (err || data.status === 'REQUEST_DENIED') {
+            console.log(err)
             req.flash('error', 'Something Is Wrong Your Request Was Denied');
             return res.redirect('back');
         }
 
         //Error handling provided by google docs -https://developers.google.com/places/web-service/autocomplete 
         if (err || data.status === 'OVER_QUERY_LIMIT') {
+            console.log(err)
             req.flash('error', 'All Requests Used Up');
             return res.redirect('back');
         }
@@ -118,6 +121,7 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function (req, r
             Campground.create(newCampground, function (err, newlyCreated) {
                 if (err) {
                     //Logs Error
+                    console.log(err)
                     req.flash('error', err.message);
 
                     return res.redirect('back');
