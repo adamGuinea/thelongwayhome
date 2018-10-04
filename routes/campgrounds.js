@@ -75,22 +75,22 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function (req, r
 
     //Location Code - Geocode Package
     geocoder.geocode(req.body.location, function (err, data) {
+    
+    cloudinary.uploader.upload(req.file.path, function (result) {
+        
+            //image variable needs to be here so the image can be stored and uploaded to cloudinary
+            image = result.secure_url;
 
-        //Error Handling For Autocomplete API Requests
-
-        //Error handling provided by google docs -https://developers.google.com/places/web-service/autocomplete 
         if (err || data.status === 'ZERO_RESULTS') {
             req.flash('error', 'Invalid address, try typing a new address');
             return res.redirect('back');
         }
 
-        //Error handling provided by google docs -https://developers.google.com/places/web-service/autocomplete 
         if (err || data.status === 'REQUEST_DENIED') {
             req.flash('error', 'Something Is Wrong Your Request Was Denied');
             return res.redirect('back');
         }
 
-        //Error handling provided by google docs -https://developers.google.com/places/web-service/autocomplete 
         if (err || data.status === 'OVER_QUERY_LIMIT') {
             req.flash('error', 'All Requests Used Up');
             return res.redirect('back');
@@ -100,18 +100,7 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function (req, r
         var lat = data[0].latitude;
         var lng = data[0].longitude;
         var location = data[0].formattedAddress;
-
-
-        //Reference: Zarko And Ian Helped Impliment the Image Upload - https://github.com/nax3t/image_upload_example
-
-        cloudinary.uploader.upload(req.file.path, function (result) {
-
-            //image variable needs to be here so the image can be stored and uploaded to cloudinary
-            image = result.secure_url;
-
-
-            //Captures All Objects And Stores Them
-            var newCampground = { name: name, image: image, description: desc, author: author, price: price, location: location, lat: lat, lng: lng };
+        var newCampground = { name: name, image: image, description: desc, author: author, price: price, location: location, lat: lat, lng: lng };
 
             // Create a new campground and save to DB by using the create method
             Campground.create(newCampground, function (err, newlyCreated) {
