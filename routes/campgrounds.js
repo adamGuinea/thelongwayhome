@@ -54,70 +54,54 @@ router.get("/", function(req, res){
 router.post("/", middleware.isLoggedIn, upload.single('image'), function (req, res) {
 
     //Local Variables 
-
-    // Requests The Name
     var name = req.body.name;
 
-    // Requests The Image 
     var image = req.body.image ? req.body.image : "/images/temp.png";
 
-    // Requests The Description  
     var desc = req.body.description;
 
-    // Requests The Authors ID + Username
     var author = {
         id: req.user._id,
         username: req.user.username
     };
 
-    // Requests The Price 
     var price = req.body.price;
 
-
-    //Location Code - Geocode Package
     geocoder.geocode(req.body.location, function (err, data) {
 
-        //Error Handling For Autocomplete API Requests
 
-        //Error handling provided by google docs -https://developers.google.com/places/web-service/autocomplete 
         if (err || data.status === 'ZERO_RESULTS') {
             console.log(err)
             req.flash('error', 'Invalid address, try typing a new address');
             return res.redirect('back');
         }
 
-        //Error handling provided by google docs -https://developers.google.com/places/web-service/autocomplete 
         if (err || data.status === 'REQUEST_DENIED') {
             console.log(err)
             req.flash('error', 'Something Is Wrong Your Request Was Denied');
             return res.redirect('back');
         }
 
-        //Error handling provided by google docs -https://developers.google.com/places/web-service/autocomplete 
+        //Error handling by google docs -https://developers.google.com/places/web-service/autocomplete 
         if (err || data.status === 'OVER_QUERY_LIMIT') {
             console.log(err)
             req.flash('error', 'All Requests Used Up');
             return res.redirect('back');
         }
 
-        //Credit To Ian For Fixing The Geocode Problem - https://www.udemy.com/the-web-developer-bootcamp/learn/v4/questions/2788856
         var lat = data[0].latitude;
         var lng = data[0].longitude;
         var location = data[0].formattedAddress;
 
 
-        //Reference: Zarko And Ian Helped Impliment the Image Upload - https://github.com/nax3t/image_upload_example
 
         cloudinary.uploader.upload(req.file.path, function (result) {
 
-            //image variable needs to be here so the image can be stored and uploaded to cloudinary
             image = result.secure_url;
 
 
-            //Captures All Objects And Stores Them
             var newCampground = { name: name, image: image, description: desc, author: author, price: price, location: location, lat: lat, lng: lng };
 
-            // Create a new campground and save to DB by using the create method
             Campground.create(newCampground, function (err, newlyCreated) {
                 if (err) {
                     //Logs Error
@@ -129,15 +113,10 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function (req, r
                 }
                 else {
 
-                    //redirect back to campgrounds page
-
-                    //Logs Error
                     console.log(newlyCreated);
 
-                    //Flash Message 
                     req.flash("success", "Campground Added Successfully");
 
-                    //Redirects Back To Featured Campgrounds Page
                     res.redirect("/campgrounds");
                 }
             });
@@ -153,12 +132,10 @@ router.get("/new", middleware.isLoggedIn, function(req, res){
 
 // SHOW ROUTE
 router.get("/:id", function(req, res){
-    // find the campground with provided id
     Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground){
         if(err){
             console.log(err);
         } else {
-        // render show template with that campground
         res.render("campgrounds/show", {campground: foundCampground});
         }
     });
@@ -178,34 +155,27 @@ router.put("/:id", middleware.checkOwnership, upload.single("image"), function (
 
     geocoder.geocode(req.body.campground.location, function (err, data) {
 
-        //Error Handling For Autocomplete API Requests
-
-        //Error handling provided by google docs -https://developers.google.com/places/web-service/autocomplete 
         if (err || data.status === 'ZERO_RESULTS') {
             req.flash('error', 'Invalid address, try typing a new address');
             return res.redirect('back');
         }
 
-        //Error handling provided by google docs -https://developers.google.com/places/web-service/autocomplete 
         if (err || data.status === 'REQUEST_DENIED') {
             req.flash('error', 'Something Is Wrong Your Request Was Denied');
             return res.redirect('back');
         }
 
-        //Error handling provided by google docs -https://developers.google.com/places/web-service/autocomplete 
         if (err || data.status === 'OVER_QUERY_LIMIT') {
             req.flash('error', 'All Requests Used Up');
             return res.redirect('back');
         }
-
-        //Credit To Ian For Fixing The Geocode Problem - https://www.udemy.com/the-web-developer-bootcamp/learn/v4/questions/2788856
         var lat = data[0].latitude;
         var lng = data[0].longitude;
         var location = data[0].formattedAddress;
 
         cloudinary.uploader.upload(req.file.path, function (result) {
             if (req.file.path) {
-                // add cloudinary url for the image to the campground object under image property
+
                 req.body.campground.image = result.secure_url;
             }
 
@@ -215,35 +185,29 @@ router.put("/:id", middleware.checkOwnership, upload.single("image"), function (
             //Updated Data Object
             Campground.findByIdAndUpdate(req.params.id, { $set: newData }, function (err, campground) {
                 if (err) {
-                    //Flash Message
                     req.flash("error", err.message);
 
-                    //Redirects Back
                     res.redirect("back");
                 }
                 else {
-                    //Flash Message
                     req.flash("success", "Successfully Updated!");
 
-                    //Redirects To Edited Campground
                     res.redirect("/campgrounds/" + campground._id);
                 }
-            }); //End Campground/findBoyIdAndUpdate
-        }); //Ends Cloudinary Image Upload
-    }); //Ends Geocoder()
-}); //Ends Put Router 
+            }); 
+        }); 
+    }); 
+}); 
 
 
 router.delete("/:id", middleware.checkOwnership, function (req, res) {
     Campground.findByIdAndRemove(req.params.id, function (err) {
         if (err) {
 
-            //Redirects To Root Featured Camps 
             res.redirect("/campgrounds");
         }
         else {
 
-            //Redirects To Root Featured Camps 
             res.redirect("/campgrounds");
         }
     });
