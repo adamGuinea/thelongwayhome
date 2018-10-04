@@ -39,14 +39,26 @@ var geocoder = NodeGeocoder(options);
 
 // index
 router.get("/", function(req, res){
+    if(req.query.search){
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');        
+        
+        Campground.find({name: regex}, function(err, allCampgrounds){
+            if(err) {
+                console.log(err);
+            } else {
+                res.render("campgrounds/index", {campgrounds: allCampgrounds, page: 'campgrounds'});
+            }
+        });
+    } else {   
     // get all campgrounds from DB
-    Campground.find({}, function(err, allCampgrounds){
+        Campground.find({}, function(err, allCampgrounds){
             if(err){
                 console.log(err);
             } else {
                 res.render("campgrounds/index", {campgrounds: allCampgrounds, page: 'campgrounds'});
             }
-    });
+        });
+    }
 });
 
 
@@ -213,6 +225,8 @@ router.delete("/:id", middleware.checkOwnership, function (req, res) {
     });
 });
 
-
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = router;
