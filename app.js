@@ -1,6 +1,5 @@
-require('dotenv').config();
+require("dotenv").load()
 
- 
    var express = require("express"),
            app = express(),
     bodyparser = require("body-parser"),
@@ -13,6 +12,8 @@ methodOverride = require("method-override"),
        Comment = require("./models/comment"),
           User = require("./models/user"),
         seedDB = require("./seeds");
+ 
+
  
 // requiring routes      
 var commentRoutes    = require("./routes/comments"),
@@ -61,6 +62,6 @@ app.use("/campgrounds",campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
 
 
-app.listen(process.env.PORT, process.env.IP, function(){
+app.listen(process.env.PORT || 3000, process.env.IP, function(){
 console.log("Vanlife server has started");
 });
