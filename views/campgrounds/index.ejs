@@ -1,13 +1,13 @@
 <% include ../partials/header %>
 
     
-<div class="container">
+<!--<div class="container">-->
     <header class="jumbotron">
         <div class="container">
             <h1>Welcome to the Vanlife Community</h1>
             <p>A collection of the best campsites from all over the world <span class="glyphicon glyphicon-tree-conifer" aria-hidden="true"></span></p>
             <p>
-                <a class="btn btn-primary btn-lg" href="/campgrounds/new">Add a New Spot</a>
+                <a class="btn btn-info btn-lg" href="/campgrounds/new">Add a New Spot</a>
             </p>
             <p>
                 <form action="/campgrounds" method="GET" class="form-inline">
@@ -28,14 +28,16 @@
     <div class="row text-center" style="display:flex; flex-wrap: wrap;">
         <% campgrounds.forEach(function(campground){ %>
             <div class="col-sm-12 col-md-6 col-lg-3">
-                <div class="thumbnail">
-                    <img class="featured-campground-image" src="<%=campground.image %>">
+                <div class="thumbnail item">
+                    <a href="/campgrounds/<%= campground._id %>"></i><img class="featured-campground-image" src="<%=campground.image %>">
+                    <i class="fas fa-camera-retro"></i>
                     <div class="caption">
                         <h4><%= campground.name %></h4>
                     </div>
-                    <p>
-                        <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">More Info</a>
-                    </p>
+                    </a>
+                    <!--<p>-->
+                    <!--    <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">More Info</a>-->
+                    <!--</p>-->
                 </div>
             </div>
         <% }); %>
@@ -84,6 +86,6 @@
     </ul>
     <% } %>
 </div>
-</div>
+<!--</div>-->
 
 <% include ../partials/footer %>
