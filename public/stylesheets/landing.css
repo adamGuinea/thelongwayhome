@@ -40,7 +40,7 @@ body {
 }
 
 .slideshow li:nth-child(1) { 
-  background-image: url(https://images.unsplash.com/photo-1519793945311-767397088877?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=c22dfe98057e702da2cb23fadb97af0e&auto=format&fit=crop&w=1000&q=60) 
+  background-image: url(https://images.unsplash.com/photo-1517824806704-9040b037703b?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjF9&s=e712bd657c9e2a111b078a67027eaf9f) 
 }
 .slideshow li:nth-child(2) { 
   background-image: url(https://images.unsplash.com/photo-1524130066-bcdb486a4084?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=453a4aa7e0da96b4127a019090e4e727&auto=format&fit=crop&w=1000&q=60);
