@@ -1,3 +1,7 @@
+#landing-header {
+  font-family: 'Special Elite';
+}
+
 .thumbnail img {
     width: 100%;
 }
@@ -26,6 +30,7 @@
 
 #campground-name {
     color: white;
+    text-decoration: none;
 }
 
 .thumbnail.item i {
