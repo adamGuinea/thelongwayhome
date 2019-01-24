@@ -17,6 +17,7 @@ methodOverride = require("method-override"),
  
 // requiring routes      
 var commentRoutes    = require("./routes/comments"),
+    reviewRoutes     = require("./routes/reviews"),
     campgroundRoutes = require("./routes/campgrounds"),
     indexRoutes      = require("./routes/index");
 
@@ -37,6 +38,7 @@ app.use(require("express-session")({
     resave: false,
     saveUninitialized: false
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -57,9 +59,10 @@ passport.deserializeUser(User.deserializeUser());
 
 
 
-app.use(indexRoutes);
-app.use("/campgrounds",campgroundRoutes);
+app.use("/", indexRoutes);
+app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
+app.use("/campgrounds/:id/reviews", reviewRoutes);
 
 
 app.listen(process.env.PORT || 3000, process.env.IP, function(){

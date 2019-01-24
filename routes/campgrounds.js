@@ -1,6 +1,8 @@
 var express = require("express");
 var router = express.Router();
 var Campground = require("../models/campground");
+var Comment = require("../models/comment");
+var Review = require("../models/review");
 var middleware = require("../middleware");
 var NodeGeocoder = require('node-geocoder');
 var multer = require('multer');
@@ -140,7 +142,7 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function (req, r
             Campground.create(newCampground, function (err, newlyCreated) {
                 if (err) {
                     //Logs Error
-                    console.log(err)
+                    console.log(err);
                     req.flash('error', err.message);
 
                     return res.redirect('back');
@@ -162,12 +164,15 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function (req, r
 
 // NEW - form to create new campground
 router.get("/new", middleware.isLoggedIn, function(req, res){
-    res.render("campgrounds/new")
+    res.render("campgrounds/new");
 });
 
 // SHOW ROUTE
 router.get("/:id", function(req, res){
-    Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground){
+    Campground.findById(req.params.id).populate("comments").populate({
+        path: "reviews",
+        options: {sort: {createdAt: -1}}
+    }).exec(function(err, foundCampground){
         if(err){
             console.log(err);
         } else {
@@ -187,7 +192,7 @@ router.get("/:id/edit", middleware.checkOwnership, function(req, res){
 
 // UPDATE CAMPGROUND ROUTE
 router.put("/:id", middleware.checkOwnership, upload.single("image"), function (req, res) {
-
+    delete req.body.campground.rating;
     geocoder.geocode(req.body.campground.location, function (err, data) {
 
         if (err || data.status === 'ZERO_RESULTS') {
@@ -216,7 +221,6 @@ router.put("/:id", middleware.checkOwnership, upload.single("image"), function (
 
             var newData = { name: req.body.campground.name, image: req.body.campground.image, description: req.body.campground.description, price: req.body.campground.price, location: location, lat: lat, lng: lng };
 
-
             //Updated Data Object
             Campground.findByIdAndUpdate(req.params.id, { $set: newData }, function (err, campground) {
                 if (err) {
@@ -236,14 +240,28 @@ router.put("/:id", middleware.checkOwnership, upload.single("image"), function (
 
 
 router.delete("/:id", middleware.checkOwnership, function (req, res) {
-    Campground.findByIdAndRemove(req.params.id, function (err) {
+    Campground.findById(req.params.id, function (err, campground) {
         if (err) {
-
             res.redirect("/campgrounds");
-        }
-        else {
-
-            res.redirect("/campgrounds");
+        } else {
+            // deletes all comments associated with the campground
+            Comment.remove({"_id": {$in: campground.comments}}, function (err) {
+                if (err) {
+                    console.log(err);
+                    return res.redirect("/campgrounds");
+                }
+                // deletes all reviews associated with the campground
+                Review.remove({"_id": {$in: campground.reviews}}, function (err) {
+                    if (err) {
+                        console.log(err);
+                        return res.redirect("/campgrounds");
+                    }
+                    //  delete the campground
+                    campground.remove();
+                    req.flash("success", "Campground deleted successfully!");
+                    res.redirect("/campgrounds");
+                });
+            });
         }
     });
 });
