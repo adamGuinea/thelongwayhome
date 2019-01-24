@@ -2,6 +2,10 @@
   font-family: 'Special Elite';
 }
 
+html {
+  background-color: #FBEEC1;
+}
+
 .thumbnail img {
     width: 100%;
 }
@@ -47,11 +51,11 @@
 }
 
 .thumbnail.item {
-  background-color: #751aff;
+  background-color: #379683;
 }
 
 .thumbnail.item i {
-    color: #751aff;
+    color: #379683;
 }
 
 .thumbnail.item:hover img {
