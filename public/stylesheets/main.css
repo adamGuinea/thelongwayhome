@@ -2,9 +2,14 @@
   font-family: 'Special Elite';
 }
 
-html {
-  background-color: #FBEEC1;
-}
+body { 
+        background: url('/bluesky.jpg') no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        
+    }
 
 .thumbnail img {
     width: 100%;

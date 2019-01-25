@@ -21,7 +21,7 @@
                     <p>
                         <em>Submitted by: <%= campground.author.username %>, <%= moment(campground.createdAt).fromNow() %></em>
                     </p>
-                    <% if(currentUser && campground.author.id.equals(currentUser._id)){ %>
+                    <% if(currentUser && campground.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
                         <a class="btn btn-xs btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
                         <form class="delete-form" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
                             <button class="btn btn-xs btn-danger">Delete</button>
@@ -63,7 +63,7 @@
                             <p style="text-align: justify; word-wrap: break-word;">
                                 <%= review.text %>
                             </p>
-                            <% if(currentUser && review.author.id.equals(currentUser._id)){ %>
+                            <% if(currentUser && review.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
                             <a class="btn btn-xs btn-warning"
                                href="/campgrounds/<%=campground._id %>/reviews/<%=review._id %>/edit">Edit</a>
                             <form id="delete-form" action="/campgrounds/<%=campground._id %>/reviews/<%=review._id %>?_method=DELETE" method="POST">
@@ -143,7 +143,7 @@
   
           <p><%= comment.text %></p>
   
-          <% if (currentUser && currentUser._id.equals(comment.author.id)) { %>
+          <% if (currentUser && currentUser._id.equals(comment.author.id) || currentUser && currentUser.isAdmin) { %>
           
             <a class="btn btn-xs btn-warning" role="button" data-toggle="collapse" href="#collapseEdit<%= comment._id %>" aria-expanded="false" aria-controls="collapse<%= comment._id %>">
             Edit</a>
