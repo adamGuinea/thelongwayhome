@@ -17,7 +17,7 @@ A collection of must do road trip locations gathered from around the world, foll
       <li><p> User cannot manage posts without being authenticated </p></li>
       <li><p> User cannot edit or delete posts and comments created by other users </p></li>
     </ul>
- </li>
+  </li>
  
   <li>
     <p>Manage campground posts with basic functionalities:</p>
@@ -47,5 +47,11 @@ A collection of must do road trip locations gathered from around the world, foll
       <li>Time since created with moment JS</li>
     </ul>
   </li>
+  
+  <li>
+    <p>In Progress - <em>28/01/19</em></p>
+    <ul>
+      <li>Follow other users activity with in-app notifications</li>
+    </ul>
 </ul>
 
