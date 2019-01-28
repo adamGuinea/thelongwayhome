@@ -101,8 +101,8 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), async function (
         username: req.user.username
     };
     var price = req.body.price;
-
-    geocoder.geocode(req.body.location, async function(err, data) {
+    
+    await geocoder.geocode(req.body.location, async function(err, data) {
         if (err || data.status === 'ZERO_RESULTS') {
             console.log(err)
             req.flash('error', 'Invalid address, try typing a new address');
@@ -125,7 +125,7 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), async function (
         var lng = data[0].longitude;
         var location = data[0].formattedAddress;
 
-        cloudinary.uploader.upload(req.file.path, async function(result) {
+        await cloudinary.uploader.upload(req.file.path, async function(result) {
 
             image = result.secure_url;
             var newCampground = { name: name, image: image, description: desc, author: author, price: price, location: location, lat: lat, lng: lng };
@@ -136,7 +136,7 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), async function (
                 let newNotification = {
                     username: req.user.username,
                     campgroundId: campground.id
-                }
+                };
                 for(const follower of user.followers){
                     let notification = await Notification.create(newNotification);
                     follower.notifications.push(notification);
