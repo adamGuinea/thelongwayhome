@@ -85,3 +85,12 @@ body {
 .checked {
     color: orange;
 }
+
+#fav-locations {
+  color: white;
+  text-shadow: 0 0 8px #66757f;
+}
+
+.jumbotron > .container > h1 {
+  text-shadow: 0 2px 1px #66757f;
+}
