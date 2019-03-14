@@ -45,13 +45,8 @@ A collection of must do road trip locations gathered from around the world, foll
       <li>Update campground photos when editing campgrounds</li>
       <li>Improve image load time on the landing page using Cloudinary</li>
       <li>Time since created with moment JS</li>
-    </ul>
-  </li>
-  
-  <li>
-    <p>In Progress - <em>28/01/19</em></p>
-    <ul>
       <li>Follow other users activity with in-app notifications</li>
     </ul>
+  </li>
 </ul>
 
