@@ -4,7 +4,6 @@
         <h1>Viewing as Administrator</h1>
     <% } %>
     
-<!--<div class="container">-->
     <header class="jumbotron">
         <div class="container">
             <h1>Welcome to the Vanlife Community</h1>
@@ -123,6 +122,15 @@
                 </ul>
             <% } %>
         </div>
-<!--</div>-->
+</div>
+
+<script> 
+    document.body.classList.add('js-loading'); 
+    window.addEventListener("load", showPage); 
+
+     function showPage() { 
+        document.body.classList.remove('js-loading'); 
+     } 
+</script>
 
 <% include ../partials/footer %>
