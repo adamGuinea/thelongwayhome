@@ -125,12 +125,14 @@
 </div>
 
 <script> 
-    document.body.classList.add('js-loading'); 
-    window.addEventListener("load", showPage); 
-
-     function showPage() { 
-        document.body.classList.remove('js-loading'); 
-     } 
+    window.onload = (e) => {
+        document.body.style.background="url('blueskyresized.jpg') no-repeat center fixed";
+    };
+    
+    setInterval(function() {
+        axios.get("https://thelongwayhome.herokuapp.com");
+    }, 300000);
+    
 </script>
 
 <% include ../partials/footer %>
