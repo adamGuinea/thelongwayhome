@@ -6,6 +6,8 @@ var express      = require("express"),
     Notification = require("../models/notification"),
     Review       = require("../models/review"),
     middleware   = require("../middleware"),
+    darksky      = require("darksky"),
+    Forecast     = require('forecast'),
     NodeGeocoder = require('node-geocoder'),
     multer       = require('multer'),
     storage      = multer.diskStorage({
@@ -167,7 +169,24 @@ router.get("/:id", function(req, res){
         if(err){
             console.log(err);
         } else {
-        res.render("campgrounds/show", {campground: foundCampground});
+            
+            var forecast = new Forecast({
+              service: 'darksky',
+              key: process.env.DARKSKY_API_KEY,
+              units: 'celcius',
+              cache: true,      // Cache API requests 
+              ttl: {            // How long to cache requests. Uses syntax from moment.js: http://momentjs.com/docs/#/durations/creating/ 
+                minutes: 27,
+                seconds: 45
+              }
+              
+            });
+            
+            forecast.get([foundCampground.lat, foundCampground.lng], function(err, weather) {
+                if(err) return console.dir(err);
+                
+                res.render("campgrounds/show", {campground: foundCampground, weather});
+            });
         }
     });
 });
